@@ -1,0 +1,54 @@
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Spring Configuration
+spring:
+  application:
+    name: food-ordering-system
+
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/food_ordering?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: foodapp
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # Redis Configuration (for future caching)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# JWT Configuration
+jwt:
+  secret: mySecretKey123456789012345678901234567890
+  expiration: 86400000 # 24 hours in milliseconds
+  refresh-expiration: 604800000 # 7 days in milliseconds
+
+# Logging Configuration
+logging:
+  level:
+    com.foodrush: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Management Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
