@@ -1,33 +1,35 @@
 package com.foodrush.food_ordering_system.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.foodrush.food_ordering_system.dto.request.LoginRequest;
 import com.foodrush.food_ordering_system.dto.request.RegistrationRequest;
+import com.foodrush.food_ordering_system.dto.response.AuthResponse;
 import com.foodrush.food_ordering_system.dto.response.UserResponse;
 import com.foodrush.food_ordering_system.entity.User;
+import com.foodrush.food_ordering_system.security.JwtTokenProvider;
 import com.foodrush.food_ordering_system.service.UserService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
    @PostMapping("/register")
-   public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegistrationRequest request) {
+   public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest request) {
        try {
+           System.out.println("Registration request received: " + request.getEmail());
+           
            User user = userService.registerUser(
                    request.getEmail(),
                    request.getPassword(),
@@ -50,15 +52,31 @@ public class AuthController {
            return ResponseEntity.status(HttpStatus.CREATED).body(response);
            
        } catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+           System.out.println("Registration error: " + e.getMessage());
+           e.printStackTrace();
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
        }
    }
    
    @PostMapping("/login")
-   public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest request) {
-       return ResponseEntity.ok("Login endpoint - JWT implementation coming next");
+   public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest request) {
+       try {
+           Authentication authentication = authenticationManager.authenticate(
+               new UsernamePasswordAuthenticationToken(
+                   request.getEmail(), 
+                   request.getPassword()
+               )
+           );
+           
+           String token = jwtTokenProvider.generateToken(authentication);
+           AuthResponse response = new AuthResponse(token, 86400000L);
+           
+           return ResponseEntity.ok(response);
+           
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       }
    }
-        
 }
 
 

@@ -1,8 +1,8 @@
 # Server Configuration
 server:
   port: 8080
-  servlet:
-    context-path: /api
+#  servlet:
+#    context-path: /api
 
 # Spring Configuration
 spring:
@@ -12,8 +12,8 @@ spring:
   # Database Configuration
   datasource:
     url: jdbc:mysql://localhost:3306/food_ordering?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: foodapp
-    password: password
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # JPA/Hibernate Configuration
