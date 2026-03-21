@@ -168,12 +168,27 @@ public class RestaurantService {
         
         Restaurant restaurant = getRestaurantById(id);
         restaurantRepository.delete(restaurant);
-        
+
         log.info("Restaurant deleted successfully: {}", restaurant.getName());
     }
 
-
     public Long getRestaurantCountByStatus(RestaurantStatus status) {
         return restaurantRepository.countByStatus(status);
+    }
+
+    // Admin methods
+    public List<Restaurant> getAllRestaurantsAdmin() {
+        log.info("Fetching all restaurants");
+        return restaurantRepository.findAll();
+    }
+
+    public List<Restaurant> getRestaurantsByStatusAdmin(RestaurantStatus status) {
+        log.info("Fetching restaurants with status: {}", status);
+        return restaurantRepository.findByStatus(status);
+    }
+
+    public Long getTotalRestaurantsCountAdmin() {
+        log.info("Getting total restaurants count");
+        return restaurantRepository.count();
     }
 }
