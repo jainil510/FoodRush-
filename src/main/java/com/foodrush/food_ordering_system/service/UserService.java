@@ -67,7 +67,7 @@ public class UserService {
         log.info("Toggling status for user: {}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        user.setEnabled(!user.getEnabled());
+        user.setEnabled(!user.isEnabled());
         return userRepository.save(user);
     }
 

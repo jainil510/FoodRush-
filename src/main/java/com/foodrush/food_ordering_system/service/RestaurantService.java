@@ -176,6 +176,16 @@ public class RestaurantService {
         return restaurantRepository.countByStatus(status);
     }
 
+    public Long getTotalRestaurantsCount() {
+        log.info("Getting total restaurants count");
+        return restaurantRepository.count();
+    }
+
+    public Long getRestaurantsCountByStatus(RestaurantStatus status) {
+        log.info("Getting restaurants count by status: {}", status);
+        return restaurantRepository.countByStatus(status);
+    }
+
     // Admin methods
     public List<Restaurant> getAllRestaurantsAdmin() {
         log.info("Fetching all restaurants");
