@@ -92,10 +92,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findOrdersWithAssignedDriver();
 
     
-    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND (o.id LIKE %:searchTerm% OR o.restaurant.name LIKE %:searchTerm%) ORDER BY o.createdAt DESC")
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND (CAST(o.id AS string) LIKE %:searchTerm% OR o.restaurant.name LIKE %:searchTerm%) ORDER BY o.createdAt DESC")
     List<Order> searchUserOrders(@Param("userId") Long userId, @Param("searchTerm") String searchTerm);
 
-    @Query("SELECT o FROM Order o WHERE o.restaurant.id = :restaurantId AND (o.id LIKE %:searchTerm% OR o.user.firstName LIKE %:searchTerm% OR o.user.lastName LIKE %:searchTerm%) ORDER BY o.createdAt DESC")
+    @Query("SELECT o FROM Order o WHERE o.restaurant.id = :restaurantId AND (CAST(o.id AS string) LIKE %:searchTerm% OR o.user.firstName LIKE %:searchTerm% OR o.user.lastName LIKE %:searchTerm%) ORDER BY o.createdAt DESC")
     List<Order> searchRestaurantOrders(@Param("restaurantId") Long restaurantId, @Param("searchTerm") String searchTerm);
 
     
