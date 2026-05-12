@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.foodrush.food_ordering_system.FoodOrderingSystemApplication
+Spring-Boot-Classpath-Index: BOOT-INF/classpath.idx
+Start-Class: com.foodrush.food_ordering_system.FoodOrderingSystemApplication
+Spring-Boot-Layers-Index: BOOT-INF/layers.idx
