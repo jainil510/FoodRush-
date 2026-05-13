@@ -9,10 +9,7 @@ COPY src ./src
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Step 2: Use a stable and slim Runtime image
-FROM eclipse-temurin:17-jre-alpine
-
-# Install ca-certificates to fix SSL/TLS issues
-RUN apk add --no-cache ca-certificates
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
