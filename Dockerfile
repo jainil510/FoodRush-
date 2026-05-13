@@ -1,19 +1,19 @@
-# Use Maven image for building
-FROM maven:3.9-openjdk-17 AS build
+# Step 1: Use Eclipse Temurin for Maven build
+FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Build the application using standard mvn (more reliable if mvnw is missing)
+RUN mvn clean package -DskipTests
 
-# Use smaller runtime image
-FROM openjdk:17-jre-slim
+# Step 2: Use a stable and slim Runtime image
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copy the built jar
+# Copy the built jar from the build stage
 COPY --from=build /app/target/food-ordering-system-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port
