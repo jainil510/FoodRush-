@@ -5,8 +5,8 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# Build the application using standard mvn (more reliable if mvnw is missing)
-RUN mvn clean package -DskipTests
+# Build the application using standard mvn, skipping tests
+RUN mvn clean package -Dmaven.test.skip=true
 
 # Step 2: Use a stable and slim Runtime image
 FROM eclipse-temurin:17-jre-alpine
